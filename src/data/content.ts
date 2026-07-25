@@ -18,8 +18,57 @@ import {
 export { sessions, paths, dailyReflections, exercises }
 export type { Quote, Session, Path, DailyReflection, Exercise, ThemeKey }
 
+import {
+  philosophers,
+  collections,
+  sessionTakeaways,
+  reflectionNotes,
+  type PhilosopherBio,
+  type Collection,
+} from './enrichment'
+
+export { philosophers, collections, sessionTakeaways, reflectionNotes }
+export type { PhilosopherBio, Collection }
+
 const sessionMap = new Map(sessions.map((s) => [s.id, s]))
 const pathMap = new Map(paths.map((p) => [p.id, p]))
+const philosopherMap = new Map(philosophers.map((p) => [p.id, p]))
+const collectionMap = new Map(collections.map((c) => [c.id, c]))
+
+export function philosopherById(id: string): PhilosopherBio | undefined {
+  return philosopherMap.get(id)
+}
+
+/** Match a quote's author string (e.g. "Marcus Aurelius") to a bio. */
+export function philosopherByAuthor(author: string): PhilosopherBio | undefined {
+  const a = author.trim().toLowerCase()
+  return philosophers.find((p) => p.name.toLowerCase() === a)
+}
+
+export function collectionById(id: string): Collection | undefined {
+  return collectionMap.get(id)
+}
+
+export function takeawayFor(sessionId: string): string | undefined {
+  return sessionTakeaways[sessionId]
+}
+
+export function reflectionNoteFor(day: number): string | undefined {
+  return reflectionNotes[day]
+}
+
+/** Sessions of a collection, dropping any dangling ids defensively. */
+export function collectionSessions(c: Collection): Session[] {
+  return c.sessionIds
+    .map((id) => sessionMap.get(id))
+    .filter((s): s is Session => Boolean(s))
+}
+
+/** A deterministic "surprise" session: stable within a day, varies by day. */
+export function surpriseSession(dateLocal: string): Session {
+  const seed = hashString('surprise-' + dateLocal)
+  return sessions[seed % sessions.length]
+}
 
 export function sessionById(id: string): Session | undefined {
   return sessionMap.get(id)

@@ -18,7 +18,7 @@ export default function Journal() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="mx-auto flex max-w-2xl flex-col gap-6">
       <div>
         <h1 className="font-head text-2xl font-700 tracking-tight text-ink">Journal</h1>
         <p className="mt-1 text-mute">

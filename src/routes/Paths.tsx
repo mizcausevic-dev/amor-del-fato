@@ -5,6 +5,7 @@ import { Check, ChevronRight, Play, X } from 'lucide-react'
 import { paths, sessionsOfPath, THEME_META, type Path } from '../data/content'
 import { useStore } from '../store/AppStore'
 import ExercisesSection from '../components/ExercisesSection'
+import MeetTheStoics from '../components/MeetTheStoics'
 
 export default function Paths() {
   const navigate = useNavigate()
@@ -66,6 +67,8 @@ export default function Paths() {
       </div>
 
       <ExercisesSection />
+
+      <MeetTheStoics />
 
       {/* Path detail */}
       <AnimatePresence>

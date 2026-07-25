@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { Home, Compass, NotebookPen, Flame, Settings, Shield } from 'lucide-react'
+import { APP_NAME_LINES } from '../config/brand'
 
 const NAV = [
   { to: '/', label: 'Today', icon: Home, end: true },
@@ -15,9 +16,9 @@ function Wordmark() {
         <Shield size={20} strokeWidth={2.2} />
       </span>
       <span className="font-head text-[15px] font-600 leading-tight tracking-tight text-ink">
-        Hey There
+        {APP_NAME_LINES[0]}
         <br />
-        Warrior
+        {APP_NAME_LINES[1]}
       </span>
     </div>
   )
@@ -65,9 +66,10 @@ export default function Layout() {
         </NavLink>
       </aside>
 
-      {/* Main content */}
+      {/* Main content. Wider on large screens so Today's two-column layout can
+          breathe; reading-heavy pages cap their own inner width. */}
       <main className="md:pl-[220px]">
-        <div className="mx-auto w-full max-w-2xl px-5 pb-28 pt-6 md:px-8 md:pb-12 md:pt-10">
+        <div className="mx-auto w-full max-w-2xl px-5 pb-28 pt-6 md:px-8 md:pb-12 md:pt-10 lg:max-w-4xl">
           <Outlet />
         </div>
       </main>

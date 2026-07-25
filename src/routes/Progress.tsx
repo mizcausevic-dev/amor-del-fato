@@ -5,6 +5,7 @@ import { liveStreak } from '../lib/streak'
 import { addDays, lastNDays, parseLocal, todayLocal } from '../lib/date'
 import { practicedDaySet } from '../lib/selectors'
 import DayDot from '../components/DayDot'
+import ShiftChart from '../components/ShiftChart'
 
 const WEEKS = 13
 
@@ -58,6 +59,8 @@ export default function Progress() {
         <Stat icon={CheckCircle} value={totalSessions} label="Sessions" />
         <Stat icon={Clock} value={state.totalMinutes} label="Minutes" />
       </div>
+
+      <ShiftChart sessions={state.completedSessions} />
 
       {/* Day-dot heatmap */}
       <div className="rounded-2xl border border-line bg-panel p-5">

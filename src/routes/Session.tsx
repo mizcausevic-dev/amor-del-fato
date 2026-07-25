@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { X, ChevronRight, Check, Flame } from 'lucide-react'
+import { X, ChevronRight, Check, Flame, Sparkles } from 'lucide-react'
 import MeditationTimer from '../components/MeditationTimer'
-import { pathOfSession, sessionById } from '../data/content'
+import CheckIn from '../components/CheckIn'
+import { pathOfSession, sessionById, takeawayFor, THEME_META } from '../data/content'
 import { useStore } from '../store/AppStore'
 import { liveStreak } from '../lib/streak'
 import { todayLocal } from '../lib/date'
+import { LENGTH_MINUTES } from '../lib/types'
 
-type Phase = 'anchor' | 'script' | 'timer' | 'reflection' | 'done'
+type Phase = 'arrive' | 'anchor' | 'script' | 'timer' | 'reflection' | 'leave' | 'done'
 const SEGMENTS: Phase[] = ['anchor', 'script', 'timer', 'reflection']
 
 export default function Session() {
@@ -19,13 +21,14 @@ export default function Session() {
   const session = id ? sessionById(id) : undefined
   const path = useMemo(() => (id ? pathOfSession(id) : undefined), [id])
 
-  const [phase, setPhase] = useState<Phase>('anchor')
+  const [phase, setPhase] = useState<Phase>('arrive')
   const [para, setPara] = useState(0)
   const [canBegin, setCanBegin] = useState(false)
   const [reflection, setReflection] = useState('')
   const [elapsed, setElapsed] = useState(0)
+  const [arrival, setArrival] = useState<number | null>(null)
+  const [includeReflection, setIncludeReflection] = useState(true)
 
-  // A short, unhurried beat before the session can begin.
   useEffect(() => {
     const t = setTimeout(() => setCanBegin(true), 2200)
     return () => clearTimeout(t)
@@ -47,24 +50,46 @@ export default function Session() {
     )
   }
 
-  const segIndex = SEGMENTS.indexOf(phase === 'done' ? 'reflection' : phase)
+  const tint = THEME_META[session.theme].tint
+  const timerSeconds = state.profile?.sessionLength
+    ? LENGTH_MINUTES[state.profile.sessionLength] * 60
+    : session.durationMin * 60
 
-  const finish = (withReflection: boolean) => {
+  const coreIndex =
+    phase === 'arrive'
+      ? -1
+      : phase === 'leave' || phase === 'done'
+        ? SEGMENTS.length - 1
+        : SEGMENTS.indexOf(phase)
+
+  const finish = (departureState: number | null) => {
     completeSession({
       sessionId: session.id,
       pathId: path?.id ?? null,
-      durationSeconds: elapsed || session.durationMin * 60,
+      durationSeconds: elapsed || timerSeconds,
       pathSessionIds: path?.sessionIds,
-      reflection: withReflection
+      arrivalState: arrival,
+      departureState,
+      reflection: includeReflection
         ? { prompt: session.reflection, body: reflection, quote: session.quote }
         : null,
     })
     setPhase('done')
   }
 
+  const takeaway = takeawayFor(session.id)
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-canvas">
-      {/* Top bar: close + segmented progress */}
+      {/* Ambient themed backdrop, capped low so it never competes with text */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.10]"
+        style={{
+          background: `radial-gradient(60% 50% at 50% 30%, ${tint} 0%, transparent 70%)`,
+        }}
+      />
+
+      {/* Top bar */}
       <div className="flex items-center gap-4 px-5 pt-5">
         <button
           onClick={() => navigate(-1)}
@@ -77,7 +102,7 @@ export default function Session() {
           {SEGMENTS.map((s, i) => (
             <span
               key={s}
-              className={`h-1 flex-1 rounded-full ${i <= segIndex ? 'bg-brand' : 'bg-line'}`}
+              className={`h-1 flex-1 rounded-full ${i <= coreIndex ? 'bg-brand' : 'bg-line'}`}
             />
           ))}
         </div>
@@ -85,6 +110,18 @@ export default function Session() {
 
       <div className="relative flex flex-1 items-center justify-center overflow-y-auto px-6 py-8">
         <AnimatePresence mode="wait">
+          {/* PHASE 0 — Arrive check-in */}
+          {phase === 'arrive' && (
+            <CheckIn
+              key="arrive"
+              title="How do you arrive?"
+              onPick={(v) => {
+                setArrival(v)
+                setPhase('anchor')
+              }}
+            />
+          )}
+
           {/* PHASE 1 — Anchor quote */}
           {phase === 'anchor' && (
             <motion.div
@@ -115,7 +152,7 @@ export default function Session() {
             </motion.div>
           )}
 
-          {/* PHASE 2 — Guided script, manual advance */}
+          {/* PHASE 2 — Guided script */}
           {phase === 'script' && (
             <motion.div
               key="script"
@@ -169,7 +206,7 @@ export default function Session() {
               className="flex flex-col items-center"
             >
               <MeditationTimer
-                initialSeconds={session.durationMin * 60}
+                initialSeconds={timerSeconds}
                 onComplete={(sec) => {
                   setElapsed(sec)
                   setTimeout(() => setPhase('reflection'), 1400)
@@ -209,18 +246,29 @@ export default function Session() {
                 className="mt-6 w-full resize-none rounded-2xl border border-line bg-panel p-4 text-[17px] leading-relaxed text-ink outline-none placeholder:text-mute focus:border-brand"
               />
               <button
-                onClick={() => finish(true)}
+                onClick={() => {
+                  setIncludeReflection(true)
+                  setPhase('leave')
+                }}
                 className="mt-4 w-full rounded-full bg-brand py-3.5 font-600 text-white transition-transform active:scale-[0.98]"
               >
                 Complete practice
               </button>
               <button
-                onClick={() => finish(false)}
+                onClick={() => {
+                  setIncludeReflection(false)
+                  setPhase('leave')
+                }}
                 className="mt-3 w-full text-center text-sm font-500 text-mute hover:text-ink"
               >
                 Skip reflection
               </button>
             </motion.div>
+          )}
+
+          {/* PHASE 5 — Leave check-in */}
+          {phase === 'leave' && (
+            <CheckIn key="leave" title="How do you leave?" onPick={(v) => finish(v)} />
           )}
 
           {/* Completion summary */}
@@ -244,6 +292,16 @@ export default function Session() {
               <p className="mt-2 text-mute">
                 You showed up today. That is the whole discipline.
               </p>
+
+              {takeaway && (
+                <div className="mt-6 rounded-2xl border border-line bg-panel p-4 text-left">
+                  <p className="flex items-center gap-2 text-xs font-600 uppercase tracking-widest text-brand">
+                    <Sparkles size={14} /> Carry this into your day
+                  </p>
+                  <p className="mt-2 text-[15px] leading-relaxed text-ink">{takeaway}</p>
+                </div>
+              )}
+
               <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-line bg-panel px-4 py-2 text-ink">
                 <Flame size={18} className="text-brand" />
                 <span className="font-600">{liveStreak(state.streak, todayLocal())}</span>

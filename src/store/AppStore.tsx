@@ -20,6 +20,7 @@ import {
   emptyState,
   type AppState,
   type JournalEntry,
+  type Profile,
   type ThemePref,
 } from '../lib/types'
 
@@ -28,6 +29,8 @@ interface CompleteSessionInput {
   pathId: string | null
   durationSeconds: number
   pathSessionIds?: string[] // lets the store advance a path pointer without importing content
+  arrivalState?: number | null
+  departureState?: number | null
   reflection?: {
     prompt: string
     body: string
@@ -49,6 +52,8 @@ interface Store {
   deleteJournalEntry: (id: string) => void
   setActivePath: (pathId: string | null) => void
   setTheme: (pref: ThemePref) => void
+  completeOnboarding: (profile: Profile) => void
+  updateProfile: (patch: Partial<Profile>) => void
   resetAll: () => void
   importState: (json: string) => boolean
 }
@@ -116,6 +121,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
           completedAtISO: now,
           durationSeconds: Math.max(0, Math.round(input.durationSeconds)),
           journalEntryId: journalId,
+          arrivalState: input.arrivalState ?? null,
+          departureState: input.departureState ?? null,
         },
         ...prev.completedSessions,
       ]
@@ -183,6 +190,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, theme: pref }))
   }, [])
 
+  const completeOnboarding = useCallback((profile: Profile) => {
+    setState((prev) => ({
+      ...prev,
+      profile,
+      onboarded: true,
+      activePathId: profile.recommendedPathId ?? prev.activePathId,
+    }))
+  }, [])
+
+  const updateProfile = useCallback((patch: Partial<Profile>) => {
+    setState((prev) => ({
+      ...prev,
+      profile: prev.profile ? { ...prev.profile, ...patch } : prev.profile,
+    }))
+  }, [])
+
   const resetAll = useCallback(() => {
     clearState()
     setState(() => ({ ...emptyState(), onboarded: true }))
@@ -207,6 +230,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       deleteJournalEntry,
       setActivePath,
       setTheme,
+      completeOnboarding,
+      updateProfile,
       resetAll,
       importState,
     }),
@@ -217,6 +242,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       deleteJournalEntry,
       setActivePath,
       setTheme,
+      completeOnboarding,
+      updateProfile,
       resetAll,
       importState,
     ],

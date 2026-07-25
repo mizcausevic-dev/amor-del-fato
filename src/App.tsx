@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { AppProvider } from './store/AppStore'
+import { AppProvider, useStore } from './store/AppStore'
 import Layout from './components/Layout'
 import Today from './routes/Today'
 import Paths from './routes/Paths'
@@ -7,14 +7,24 @@ import Journal from './routes/Journal'
 import Progress from './routes/Progress'
 import Settings from './routes/Settings'
 import Session from './routes/Session'
+import Breathe from './routes/Breathe'
+import Onboarding from './routes/Onboarding'
+
+function OnboardingGate() {
+  const { state } = useStore()
+  if (state.onboarded) return null
+  return <Onboarding />
+}
 
 export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
+        <OnboardingGate />
         <Routes>
-          {/* Full-screen player, outside the app chrome */}
+          {/* Full-screen surfaces, outside the app chrome */}
           <Route path="/session/:id" element={<Session />} />
+          <Route path="/breathe" element={<Breathe />} />
 
           {/* Everything else inside the nav shell */}
           <Route element={<Layout />}>

@@ -3,6 +3,7 @@ import { Sun, Moon, Monitor, Download, Trash2, Shield } from 'lucide-react'
 import { useStore } from '../store/AppStore'
 import { exportState } from '../lib/storage'
 import type { ThemePref } from '../lib/types'
+import { APP_NAME } from '../config/brand'
 
 const THEMES: Array<{ key: ThemePref; label: string; icon: typeof Sun }> = [
   { key: 'light', label: 'Light', icon: Sun },
@@ -59,8 +60,8 @@ export default function Settings() {
       <section className="rounded-2xl border border-line bg-panel p-5">
         <p className="text-xs font-600 uppercase tracking-widest text-mute">Your data</p>
         <p className="mt-2 text-sm text-mute">
-          Hey There Warrior is local-first. Your streak, sessions, and journal live only
-          in this browser. No account, no server, no tracking.
+          {APP_NAME} is local-first. Your streak, sessions, and journal live only in this
+          browser. No account, no server, no tracking.
         </p>
         <button
           onClick={download}
@@ -117,7 +118,7 @@ export default function Settings() {
         </p>
       </section>
 
-      <p className="text-center text-xs text-mute">Hey There Warrior · v1.0</p>
+      <p className="text-center text-xs text-mute">{APP_NAME} · v1.1</p>
     </div>
   )
 }

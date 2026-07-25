@@ -8,6 +8,8 @@ export interface CompletedSession {
   completedAtISO: string // full timestamp, display/sort only, never streak math
   durationSeconds: number // actual silent-timer seconds completed
   journalEntryId: string | null
+  arrivalState: number | null // 1..5 how they arrived, null if skipped
+  departureState: number | null // 1..5 how they left, null if skipped
 }
 
 export interface JournalEntry {
@@ -34,6 +36,23 @@ export interface StreakState {
 }
 
 export type ThemePref = 'light' | 'dark' | 'system'
+export type PracticeTime = 'morning' | 'evening' | 'both'
+export type SessionLength = 'short' | 'standard' | 'deep'
+
+export interface Profile {
+  focusAreas: string[] // ThemeKey values, ordered, first = primary. Max 3.
+  practiceTime: PracticeTime
+  sessionLength: SessionLength
+  name: string | null
+  recommendedPathId: string | null
+}
+
+/** Map a chosen session-length preference to a default timer duration. */
+export const LENGTH_MINUTES: Record<SessionLength, number> = {
+  short: 5,
+  standard: 10,
+  deep: 15,
+}
 
 export interface AppState {
   version: number
@@ -45,6 +64,7 @@ export interface AppState {
   activePathId: string | null
   theme: ThemePref
   onboarded: boolean
+  profile: Profile | null
 }
 
 export const CURRENT_VERSION = 1
@@ -60,5 +80,6 @@ export function emptyState(): AppState {
     activePathId: null,
     theme: 'system',
     onboarded: false,
+    profile: null,
   }
 }
