@@ -1,0 +1,83 @@
+@import 'tailwindcss';
+
+/* Dark mode driven by a .dark class on <html> (toggled from Settings, seeded by system). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Warm "stone, not steel" palette. Light + dark tokens flip on .dark. */
+:root {
+  --canvas: #f5f1ea;
+  --panel: #ffffff;
+  --panel-2: #faf7f1;
+  --line: #e8e2d6;
+  --ink: #2b2823;
+  --mute: #7a7468;
+  --brand: #b5502d;
+  --brand-soft: rgba(181, 80, 45, 0.12);
+  --brand-2: #6b7f6b;
+}
+
+.dark {
+  --canvas: #1a1815;
+  --panel: #242019;
+  --panel-2: #2b271f;
+  --line: #3a342a;
+  --ink: #ede7db;
+  --mute: #9b9484;
+  --brand: #d97848;
+  --brand-soft: rgba(217, 120, 72, 0.15);
+  --brand-2: #8ca087;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-2: var(--brand-2);
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-head: 'Space Grotesk', system-ui, sans-serif;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Respect users who prefer reduced motion. Framer Motion also reads this. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Thin, calm scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+/* Textareas and inputs inherit the calm surface. */
+textarea,
+input {
+  font-family: inherit;
+}
