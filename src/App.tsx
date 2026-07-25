@@ -9,6 +9,7 @@ import Settings from './routes/Settings'
 import Session from './routes/Session'
 import Breathe from './routes/Breathe'
 import Onboarding from './routes/Onboarding'
+import Terms from './routes/Terms'
 
 function OnboardingGate() {
   const { state } = useStore()
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/journal" element={<Journal />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/terms" element={<Terms />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

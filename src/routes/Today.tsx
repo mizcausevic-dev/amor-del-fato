@@ -186,6 +186,7 @@ export default function Today() {
             rows={4}
             autoFocus
             placeholder="A few honest lines."
+            aria-label={`Reflection: ${daily.prompt}`}
             className="w-full resize-none rounded-xl border border-line bg-panel p-3 text-[15px] leading-relaxed text-ink outline-none placeholder:text-mute focus:border-brand"
           />
           <div className="mt-2 flex gap-2">
@@ -240,16 +241,20 @@ export default function Today() {
         </div>
       </div>
 
-      {/* Body: single column on mobile, two columns on desktop */}
+      {/* Body: single column on mobile, two columns on desktop.
+          min-w-0 on both columns is load-bearing: without it the grid tracks
+          size to max-content, and the horizontal-scroll collections rail forces
+          the whole page ~5x wider than the viewport (which mobile browsers react
+          to by zooming out, pushing content off-screen). */}
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr] lg:items-start">
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           {primaryCard}
           {quickActions}
           {carryLine}
           <div className="lg:hidden">{collectionsRail}</div>
           {dailyCard}
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           <div className="hidden lg:block">{collectionsRail}</div>
           <StreakStrip practiced={practiced} />
           {journalGlimpse}
@@ -260,6 +265,9 @@ export default function Today() {
       <AnimatePresence>
         {quickOpen && (
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Free reflection"
             className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm md:items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -298,6 +306,7 @@ export default function Today() {
                 rows={6}
                 autoFocus
                 placeholder="What is on your mind right now?"
+                aria-label="Free reflection"
                 className="mt-3 w-full resize-none rounded-2xl border border-line bg-panel p-4 text-[16px] leading-relaxed text-ink outline-none placeholder:text-mute focus:border-brand"
               />
               <button

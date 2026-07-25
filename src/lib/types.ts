@@ -35,7 +35,7 @@ export interface StreakState {
   lastCompletedDateLocal: string | null
 }
 
-export type ThemePref = 'light' | 'dark' | 'system'
+export type ThemePref = 'light' | 'dark' | 'serene' | 'system'
 export type PracticeTime = 'morning' | 'evening' | 'both'
 export type SessionLength = 'short' | 'standard' | 'deep'
 

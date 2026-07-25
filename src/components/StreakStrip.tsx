@@ -24,11 +24,16 @@ export default function StreakStrip({ practiced }: { practiced: Set<string> }) {
           : done
             ? 'done'
             : 'missed'
-        const label = parseLocal(d).toLocaleDateString(undefined, { weekday: 'short' })[0]
+        const weekday = parseLocal(d).toLocaleDateString(undefined, { weekday: 'long' })
+        const dateLabel = parseLocal(d).toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+        })
+        const fullLabel = `${weekday}, ${dateLabel}${isToday ? ' (today)' : ''}: ${done ? 'practiced' : 'missed'}`
         return (
           <span key={d} className="flex flex-col items-center gap-2">
-            <DayDot state={state} size={13} title={d} />
-            <span className="text-[11px] font-500 text-mute">{label}</span>
+            <DayDot state={state} size={13} title={fullLabel} />
+            <span className="text-[11px] font-500 text-mute">{weekday[0]}</span>
           </span>
         )
       })}

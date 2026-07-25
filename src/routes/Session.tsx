@@ -243,6 +243,7 @@ export default function Session() {
                 rows={6}
                 autoFocus
                 placeholder="Write freely. This is only for you."
+                aria-label={`Reflection: ${session.reflection}`}
                 className="mt-6 w-full resize-none rounded-2xl border border-line bg-panel p-4 text-[17px] leading-relaxed text-ink outline-none placeholder:text-mute focus:border-brand"
               />
               <button

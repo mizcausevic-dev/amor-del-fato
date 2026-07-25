@@ -28,6 +28,19 @@
   --brand-2: #8ca087;
 }
 
+/* Serene: a cool, airy, calm alternative. Eucalyptus and mist instead of clay. */
+.serene {
+  --canvas: #e8eeea;
+  --panel: #f7faf8;
+  --panel-2: #eef3f0;
+  --line: #d3ded7;
+  --ink: #29352f;
+  --mute: #647269;
+  --brand: #4f7d6e;
+  --brand-soft: rgba(79, 125, 110, 0.14);
+  --brand-2: #7e9e8f;
+}
+
 @theme inline {
   --color-canvas: var(--canvas);
   --color-panel: var(--panel);
@@ -86,6 +99,33 @@ body::after {
 
 @media (prefers-reduced-motion: no-preference) {
   /* nothing extra; grain is static regardless */
+}
+
+/* Visible keyboard focus everywhere, one rule instead of per-component styling.
+   Mouse/touch clicks don't trigger :focus-visible, so this never shows for
+   pointer users, only keyboard navigation. */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Skip-to-content link: invisible until keyboard-focused, then jumps above
+   the nav so keyboard users don't have to tab through it every page. */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  background: var(--brand);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0;
 }
 
 /* Thin, calm scrollbars. */

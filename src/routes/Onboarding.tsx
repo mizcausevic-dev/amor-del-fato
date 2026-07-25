@@ -234,6 +234,7 @@ export default function Onboarding() {
                 autoFocus
                 maxLength={40}
                 placeholder="Your name"
+                aria-label="Your name (optional)"
                 onKeyDown={(e) => e.key === 'Enter' && commit(true)}
                 className="mt-6 w-full rounded-2xl border border-line bg-panel px-4 py-3.5 text-center text-lg text-ink outline-none placeholder:text-mute focus:border-brand"
               />

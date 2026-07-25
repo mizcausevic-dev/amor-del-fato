@@ -74,6 +74,9 @@ export default function Paths() {
       <AnimatePresence>
         {selected && (
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={selected.title}
             className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm md:items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

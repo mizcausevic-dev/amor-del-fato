@@ -64,9 +64,16 @@ function applyTheme(pref: ThemePref) {
   const root = document.documentElement
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   const dark = pref === 'dark' || (pref === 'system' && systemDark)
+  const serene = pref === 'serene'
   root.classList.toggle('dark', dark)
+  root.classList.toggle('serene', serene)
   const meta = document.querySelector('meta[name="theme-color"]')
-  if (meta) meta.setAttribute('content', dark ? '#1A1815' : '#F5F1EA')
+  if (meta) {
+    meta.setAttribute(
+      'content',
+      dark ? '#1A1815' : serene ? '#E8EEEA' : '#F5F1EA',
+    )
+  }
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {

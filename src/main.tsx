@@ -21,4 +21,12 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {})
   })
+  // When a new SW takes control (deploy with a bumped VERSION), reload once so
+  // a returning device on a stale/broken cache self-heals to the fresh build.
+  let refreshing = false
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return
+    refreshing = true
+    window.location.reload()
+  })
 }

@@ -27,12 +27,16 @@ function Wordmark() {
 export default function Layout() {
   return (
     <div className="min-h-svh">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+
       {/* Desktop left rail */}
       <aside className="fixed inset-y-0 left-0 z-20 hidden w-[220px] flex-col border-r border-line bg-panel/60 px-4 py-6 backdrop-blur md:flex">
         <div className="mb-8">
           <Wordmark />
         </div>
-        <nav className="flex flex-1 flex-col gap-1">
+        <nav aria-label="Primary" className="flex flex-1 flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
@@ -68,14 +72,17 @@ export default function Layout() {
 
       {/* Main content. Wider on large screens so Today's two-column layout can
           breathe; reading-heavy pages cap their own inner width. */}
-      <main className="md:pl-[220px]">
+      <main id="main-content" tabIndex={-1} className="outline-none md:pl-[220px]">
         <div className="mx-auto w-full max-w-2xl px-5 pb-28 pt-6 md:px-8 md:pb-12 md:pt-10 lg:max-w-4xl">
           <Outlet />
         </div>
       </main>
 
       {/* Mobile bottom tab bar: fixed 4 items, equal width, no scroll */}
-      <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-panel/90 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+      <nav
+        aria-label="Primary"
+        className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-panel/90 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+      >
         {NAV.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}

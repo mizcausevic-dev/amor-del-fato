@@ -1,12 +1,16 @@
 import { useState } from 'react'
-import { Sun, Moon, Monitor, Download, Trash2, Shield } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Sun, Moon, Monitor, Leaf, Download, Trash2, Shield, ScrollText } from 'lucide-react'
 import { useStore } from '../store/AppStore'
 import { exportState } from '../lib/storage'
 import type { ThemePref } from '../lib/types'
 import { APP_NAME } from '../config/brand'
 
+const BACKUP_SLUG = APP_NAME.toLowerCase().replace(/\s+/g, '-')
+
 const THEMES: Array<{ key: ThemePref; label: string; icon: typeof Sun }> = [
   { key: 'light', label: 'Light', icon: Sun },
+  { key: 'serene', label: 'Serene', icon: Leaf },
   { key: 'dark', label: 'Dark', icon: Moon },
   { key: 'system', label: 'System', icon: Monitor },
 ]
@@ -20,7 +24,7 @@ export default function Settings() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `hey-there-warrior-backup-${state.streak.lastCompletedDateLocal ?? 'export'}.json`
+    a.download = `${BACKUP_SLUG}-backup-${state.streak.lastCompletedDateLocal ?? 'export'}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -35,7 +39,7 @@ export default function Settings() {
       {/* Appearance */}
       <section className="rounded-2xl border border-line bg-panel p-5">
         <p className="text-xs font-600 uppercase tracking-widest text-mute">Appearance</p>
-        <div className="mt-4 grid grid-cols-3 gap-2">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {THEMES.map(({ key, label, icon: Icon }) => {
             const active = state.theme === key
             return (
@@ -117,6 +121,13 @@ export default function Settings() {
           not put in a Stoic&rsquo;s mouth.
         </p>
       </section>
+
+      <Link
+        to="/terms"
+        className="flex items-center justify-center gap-2 rounded-full border border-line bg-panel py-3 text-sm font-500 text-ink transition-colors hover:bg-panel-2"
+      >
+        <ScrollText size={16} /> Terms &amp; Privacy
+      </Link>
 
       <p className="text-center text-xs text-mute">{APP_NAME} · v1.1</p>
     </div>
