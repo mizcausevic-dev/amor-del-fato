@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { glossary, type GlossaryTerm } from '../data/glossary'
 import { useDocMeta } from '../lib/useDocMeta'
+import StudyNav from '../components/StudyNav'
 
 type Mode = 'browse' | 'study' | 'quiz'
 
@@ -68,6 +69,7 @@ export default function Glossary() {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
+      <StudyNav />
       <div>
         <h1 className="font-head text-2xl font-700 tracking-tight text-ink">Glossary</h1>
         <p className="mt-1 text-mute">

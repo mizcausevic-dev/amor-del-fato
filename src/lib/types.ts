@@ -58,6 +58,20 @@ export const LENGTH_MINUTES: Record<SessionLength, number> = {
   deep: 15,
 }
 
+export type TextScale = 'small' | 'normal' | 'large'
+
+export interface Prefs {
+  voiceGuidance: boolean // speak the guided script aloud (Web Speech)
+  ambientSound: boolean // soft ambient bed during the silent timer
+  textScale: TextScale // readability: scales the root rem, so the whole UI scales
+}
+
+export const TEXT_SCALE_PX: Record<TextScale, string> = {
+  small: '15px',
+  normal: '16px',
+  large: '18px',
+}
+
 export interface AppState {
   version: number
   completedSessions: CompletedSession[]
@@ -69,6 +83,7 @@ export interface AppState {
   theme: ThemePref
   onboarded: boolean
   profile: Profile | null
+  prefs: Prefs
 }
 
 export const CURRENT_VERSION = 1
@@ -85,5 +100,6 @@ export function emptyState(): AppState {
     theme: 'system',
     onboarded: false,
     profile: null,
+    prefs: { voiceGuidance: false, ambientSound: false, textScale: 'normal' },
   }
 }

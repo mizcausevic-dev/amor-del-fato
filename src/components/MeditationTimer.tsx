@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Play, Pause, RotateCcw } from 'lucide-react'
-import { playBell, primeAudio } from '../lib/audio'
+import { Play, Pause, RotateCcw, Waves } from 'lucide-react'
+import { playBell, primeAudio, startAmbient, stopAmbient } from '../lib/audio'
 
 interface Props {
   initialSeconds: number
+  ambientDefault?: boolean
   onComplete: (elapsedSeconds: number) => void
 }
 
@@ -16,12 +17,17 @@ function fmt(total: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export default function MeditationTimer({ initialSeconds, onComplete }: Props) {
+export default function MeditationTimer({
+  initialSeconds,
+  ambientDefault = false,
+  onComplete,
+}: Props) {
   const reduce = useReducedMotion()
   const [duration, setDuration] = useState(initialSeconds)
   const [remaining, setRemaining] = useState(initialSeconds)
   const [running, setRunning] = useState(false)
   const [done, setDone] = useState(false)
+  const [ambientOn, setAmbientOn] = useState(ambientDefault)
   const deadlineRef = useRef<number | null>(null)
   const tickRef = useRef<number | null>(null)
 
@@ -30,6 +36,18 @@ export default function MeditationTimer({ initialSeconds, onComplete }: Props) {
       clearInterval(tickRef.current)
       tickRef.current = null
     }
+  }
+
+  // Always release the ambient bed when the timer unmounts (e.g. session closed).
+  useEffect(() => stopAmbient, [])
+
+  const toggleAmbient = () => {
+    setAmbientOn((on) => {
+      const next = !on
+      if (next && running) startAmbient()
+      else if (!next) stopAmbient()
+      return next
+    })
   }
 
   // Drive the countdown from an absolute deadline so a throttled/background tab
@@ -45,6 +63,7 @@ export default function MeditationTimer({ initialSeconds, onComplete }: Props) {
         setRunning(false)
         setDone(true)
         deadlineRef.current = null
+        stopAmbient()
         playBell()
         onComplete(duration)
       }
@@ -55,14 +74,16 @@ export default function MeditationTimer({ initialSeconds, onComplete }: Props) {
   const start = useCallback(() => {
     if (remaining <= 0) return
     primeAudio()
+    if (ambientOn) startAmbient()
     deadlineRef.current = Date.now() + remaining * 1000
     setRunning(true)
     setDone(false)
-  }, [remaining])
+  }, [remaining, ambientOn])
 
   const pause = useCallback(() => {
     setRunning(false)
     deadlineRef.current = null
+    stopAmbient()
   }, [])
 
   const reset = useCallback(() => {
@@ -70,6 +91,7 @@ export default function MeditationTimer({ initialSeconds, onComplete }: Props) {
     setRunning(false)
     setDone(false)
     deadlineRef.current = null
+    stopAmbient()
     setRemaining(duration)
   }, [duration])
 
@@ -147,7 +169,18 @@ export default function MeditationTimer({ initialSeconds, onComplete }: Props) {
         >
           {running ? <Pause size={26} /> : <Play size={26} className="ml-0.5" />}
         </button>
-        <div className="h-12 w-12" aria-hidden />
+        <button
+          onClick={toggleAmbient}
+          aria-pressed={ambientOn}
+          aria-label={ambientOn ? 'Turn ambient sound off' : 'Turn ambient sound on'}
+          className={`grid h-12 w-12 place-items-center rounded-full border transition-colors ${
+            ambientOn
+              ? 'border-brand bg-brand-soft text-brand'
+              : 'border-line text-mute hover:text-ink'
+          }`}
+        >
+          <Waves size={20} />
+        </button>
       </div>
 
       {/* Duration presets */}

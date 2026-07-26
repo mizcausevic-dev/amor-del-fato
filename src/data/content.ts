@@ -122,3 +122,53 @@ export const THEME_META: Record<ThemeKey, { label: string; tint: string }> = {
 export function defaultSession(): Session {
   return sessions[0]
 }
+
+// Map an external context tag to the theme it most naturally calls for.
+const TAG_THEME: Record<string, ThemeKey> = {
+  Work: 'control',
+  Money: 'control',
+  Family: 'relationships',
+  People: 'relationships',
+  Health: 'mortality',
+  Solitude: 'purpose',
+  World: 'adversity',
+  Sleep: 'resilience',
+}
+
+interface Recommendation {
+  path: Path
+  reason: string
+}
+
+/**
+ * A gentle recommendation from the user's own recent check-ins. This is a
+ * suggestion, never a dashboard or a score: it looks at how you have been
+ * ARRIVING and the externals you named, and points to a path that meets it.
+ * Returns null unless there is a real, recent signal.
+ */
+export function recommendPractice(
+  completed: Array<{ arrivalState: number | null; tags?: string[] }>,
+  activePathId: string | null,
+): Recommendation | null {
+  const recent = completed.filter((c) => c.arrivalState != null).slice(0, 8)
+  if (recent.length < 3) return null
+  const avg = recent.reduce((a, c) => a + (c.arrivalState as number), 0) / recent.length
+  if (avg > 2.8) return null // arriving fairly steady; no nudge needed
+
+  const tagCounts = new Map<string, number>()
+  for (const c of recent) for (const t of c.tags ?? []) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
+  let topTag: string | null = null
+  let topN = 0
+  for (const [t, n] of tagCounts) if (n > topN) { topTag = t; topN = n }
+
+  const theme: ThemeKey = topTag ? (TAG_THEME[topTag] ?? 'fear') : 'fear'
+  let path =
+    paths.find((p) => p.theme === theme && p.id !== activePathId) ??
+    paths.find((p) => (p.theme === 'fear' || p.theme === 'control') && p.id !== activePathId)
+  if (!path) return null
+
+  const reason = topTag
+    ? `You have been arriving unsettled, often around ${topTag.toLowerCase()}. This path meets that.`
+    : 'You have arrived unsettled a few times lately. This path is built for that.'
+  return { path, reason }
+}

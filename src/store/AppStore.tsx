@@ -19,9 +19,12 @@ import { todayLocal } from '../lib/date'
 import { advanceStreak } from '../lib/streak'
 import {
   emptyState,
+  TEXT_SCALE_PX,
   type AppState,
   type JournalEntry,
+  type Prefs,
   type Profile,
+  type TextScale,
   type ThemePref,
 } from '../lib/types'
 
@@ -55,6 +58,8 @@ interface Store {
   togglePin: (id: string) => void
   setActivePath: (pathId: string | null) => void
   setTheme: (pref: ThemePref) => void
+  setPref: (key: keyof Prefs, value: boolean) => void
+  setTextScale: (scale: TextScale) => void
   completeOnboarding: (profile: Profile) => void
   updateProfile: (patch: Partial<Profile>) => void
   resetAll: () => void
@@ -100,6 +105,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [state.theme])
+
+  // Readability: scale the root rem so the whole UI scales proportionally.
+  useEffect(() => {
+    document.documentElement.style.fontSize = TEXT_SCALE_PX[state.prefs.textScale]
+  }, [state.prefs.textScale])
 
   const completeSession = useCallback((input: CompleteSessionInput) => {
     setState((prev) => {
@@ -211,6 +221,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, theme: pref }))
   }, [])
 
+  const setPref = useCallback((key: keyof Prefs, value: boolean) => {
+    setState((prev) => ({ ...prev, prefs: { ...prev.prefs, [key]: value } }))
+  }, [])
+
+  const setTextScale = useCallback((scale: TextScale) => {
+    setState((prev) => ({ ...prev, prefs: { ...prev.prefs, textScale: scale } }))
+  }, [])
+
   const completeOnboarding = useCallback((profile: Profile) => {
     setState((prev) => ({
       ...prev,
@@ -261,6 +279,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       togglePin,
       setActivePath,
       setTheme,
+      setPref,
+      setTextScale,
       completeOnboarding,
       updateProfile,
       resetAll,
@@ -274,6 +294,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       togglePin,
       setActivePath,
       setTheme,
+      setPref,
+      setTextScale,
       completeOnboarding,
       updateProfile,
       resetAll,

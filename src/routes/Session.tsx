@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { X, ChevronRight, Check, Flame, Sparkles } from 'lucide-react'
+import { X, ChevronRight, Check, Flame, Sparkles, Volume2, VolumeX } from 'lucide-react'
 import MeditationTimer from '../components/MeditationTimer'
 import CheckIn from '../components/CheckIn'
 import { pathOfSession, sessionById, takeawayFor, THEME_META } from '../data/content'
@@ -9,9 +9,20 @@ import { useStore } from '../store/AppStore'
 import { liveStreak } from '../lib/streak'
 import { todayLocal } from '../lib/date'
 import { LENGTH_MINUTES } from '../lib/types'
+import { speak, stopSpeaking, speechSupported } from '../lib/speech'
 
 type Phase = 'arrive' | 'anchor' | 'script' | 'timer' | 'reflection' | 'leave' | 'done'
 const SEGMENTS: Phase[] = ['anchor', 'script', 'timer', 'reflection']
+
+const PHASE_LABEL: Record<Phase, string> = {
+  arrive: 'Arriving. How do you arrive?',
+  anchor: 'Settle. Find your anchor.',
+  script: 'Guided reflection.',
+  timer: 'Silent practice.',
+  reflection: 'Reflect on your practice.',
+  leave: 'How do you leave?',
+  done: 'Practice complete.',
+}
 
 export default function Session() {
   const { id } = useParams<{ id: string }>()
@@ -29,11 +40,25 @@ export default function Session() {
   const [arrival, setArrival] = useState<number | null>(null)
   const [tags, setTags] = useState<string[]>([])
   const [includeReflection, setIncludeReflection] = useState(true)
+  const [voiceOn, setVoiceOn] = useState(state.prefs.voiceGuidance)
+  const voiceAvailable = speechSupported()
 
   useEffect(() => {
     const t = setTimeout(() => setCanBegin(true), 2200)
     return () => clearTimeout(t)
   }, [])
+
+  // Speak the current guided paragraph aloud when voice is on. Advancing (which
+  // changes `para`) re-triggers this and cancels the prior utterance. Voice
+  // narrates, it never auto-advances; the user still drives the pace.
+  const script = session?.script
+  useEffect(() => {
+    if (phase === 'script' && voiceOn && script) speak(script[para])
+    return () => stopSpeaking()
+  }, [phase, para, voiceOn, script])
+
+  // Never leave speech running after the session unmounts.
+  useEffect(() => stopSpeaking, [])
 
   if (!session) {
     return (
@@ -109,6 +134,11 @@ export default function Session() {
           ))}
         </div>
       </div>
+
+      {/* Announce each phase to assistive tech (the animated transitions are silent to it) */}
+      <p className="sr-only" aria-live="polite" role="status">
+        {PHASE_LABEL[phase]}
+      </p>
 
       <div className="relative flex flex-1 items-center justify-center overflow-y-auto px-6 py-8">
         <AnimatePresence mode="wait">
@@ -196,6 +226,18 @@ export default function Session() {
               <p className="mt-3 text-xs text-mute">
                 {para + 1} of {session.script.length}
               </p>
+              {voiceAvailable && (
+                <button
+                  onClick={() => setVoiceOn((v) => !v)}
+                  aria-pressed={voiceOn}
+                  className={`mt-4 inline-flex items-center gap-1.5 text-xs font-500 transition-colors ${
+                    voiceOn ? 'text-brand' : 'text-mute hover:text-ink'
+                  }`}
+                >
+                  {voiceOn ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                  {voiceOn ? 'Voice on' : 'Read aloud'}
+                </button>
+              )}
             </motion.div>
           )}
 
@@ -211,6 +253,7 @@ export default function Session() {
             >
               <MeditationTimer
                 initialSeconds={timerSeconds}
+                ambientDefault={state.prefs.ambientSound}
                 onComplete={(sec) => {
                   setElapsed(sec)
                   setTimeout(() => setPhase('reflection'), 1400)

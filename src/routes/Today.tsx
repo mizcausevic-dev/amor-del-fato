@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Flame, Play, PenLine, Wind, Shuffle, Check, ChevronRight, X, Pin } from 'lucide-react'
+import { Flame, Play, PenLine, Wind, Shuffle, Check, ChevronRight, X, Pin, Share2 } from 'lucide-react'
 import { useStore } from '../store/AppStore'
 import { liveStreak } from '../lib/streak'
 import { humanDate, todayLocal } from '../lib/date'
@@ -12,12 +12,14 @@ import {
   dailyForDate,
   defaultSession,
   pathById,
+  recommendPractice,
   reflectionNoteFor,
   sessionsOfPath,
   surpriseSession,
   takeawayFor,
 } from '../data/content'
 import StreakStrip from '../components/StreakStrip'
+import { createQuoteCard, shareOrDownload } from '../lib/shareCard'
 
 function partOfDay(): string {
   const h = new Date().getHours()
@@ -35,7 +37,7 @@ function dayHash(s: string): number {
 
 export default function Today() {
   const navigate = useNavigate()
-  const { state, addJournalEntry } = useStore()
+  const { state, addJournalEntry, setActivePath } = useStore()
   const today = todayLocal()
   const streak = liveStreak(state.streak, today)
   const practiced = practicedDaySet(state)
@@ -64,6 +66,9 @@ export default function Today() {
   // Resurface one kept "lesson", stable for the day, rotating across pinned entries.
   const pinned = state.journalEntries.filter((e) => e.pinned)
   const lesson = pinned.length ? pinned[dayHash(today) % pinned.length] : null
+
+  // A gentle recommendation from recent check-ins (suggestion, not analytics).
+  const rec = recommendPractice(state.completedSessions, state.activePathId)
 
   const [reflectOpen, setReflectOpen] = useState(false)
   const [quickOpen, setQuickOpen] = useState(false)
@@ -164,9 +169,25 @@ export default function Today() {
     </div>
   )
 
+  const shareQuote = async () => {
+    const blob = await createQuoteCard(daily.quote.text, daily.quote.author)
+    if (blob) await shareOrDownload(blob, 'amor-del-fato-quote.png')
+  }
+
   const dailyCard = (
     <div className="rounded-2xl border border-line bg-panel-2 p-5">
-      <p className="text-xs font-600 uppercase tracking-widest text-mute">Daily reflection</p>
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-600 uppercase tracking-widest text-mute">
+          Daily reflection
+        </p>
+        <button
+          onClick={shareQuote}
+          aria-label="Share this quote as an image"
+          className="grid h-7 w-7 place-items-center rounded-full text-mute transition-colors hover:text-brand"
+        >
+          <Share2 size={15} />
+        </button>
+      </div>
       <p className="mt-2 font-serif text-lg leading-relaxed text-ink">
         &ldquo;{daily.quote.text}&rdquo;
       </p>
@@ -254,8 +275,9 @@ export default function Today() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* Header. Extra right padding on mobile keeps the streak chip clear of the
+          floating search button (which only exists on mobile). */}
+      <div className="flex items-center justify-between pr-12 md:pr-0">
         <div>
           <p className="text-sm font-500 text-mute">{humanDate()}</p>
           <h1 className="font-head text-2xl font-700 tracking-tight text-ink">
@@ -283,6 +305,24 @@ export default function Today() {
           {dailyCard}
         </div>
         <div className="flex min-w-0 flex-col gap-4">
+          {rec && (
+            <button
+              onClick={() => {
+                const list = sessionsOfPath(rec.path)
+                setActivePath(rec.path.id)
+                if (list[0]) navigate(`/session/${list[0].id}`)
+              }}
+              className="w-full rounded-2xl border border-brand/30 bg-brand-soft/30 p-4 text-left transition-colors hover:bg-brand-soft/50"
+            >
+              <p className="text-xs font-600 uppercase tracking-widest text-brand">
+                Suggested for you
+              </p>
+              <p className="mt-2 font-head text-lg font-600 leading-tight text-ink">
+                {rec.path.title}
+              </p>
+              <p className="mt-1 text-sm text-mute">{rec.reason}</p>
+            </button>
+          )}
           <div className="hidden lg:block">{collectionsRail}</div>
           <StreakStrip practiced={practiced} />
           {lessonCard}

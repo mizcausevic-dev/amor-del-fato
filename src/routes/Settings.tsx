@@ -12,11 +12,56 @@ import {
   Shield,
   ScrollText,
   Check,
+  Smartphone,
+  Volume2,
+  Waves,
 } from 'lucide-react'
 import { useStore } from '../store/AppStore'
 import { exportState, journalToMarkdown } from '../lib/storage'
 import { useDocMeta } from '../lib/useDocMeta'
-import type { ThemePref } from '../lib/types'
+import { useInstallPrompt } from '../lib/useInstallPrompt'
+import { speechSupported } from '../lib/speech'
+
+function Toggle({
+  label,
+  hint,
+  icon: Icon,
+  on,
+  onChange,
+}: {
+  label: string
+  hint?: string
+  icon: typeof Volume2
+  on: boolean
+  onChange: (v: boolean) => void
+}) {
+  return (
+    <button
+      onClick={() => onChange(!on)}
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      className="flex w-full items-center justify-between gap-4 py-2.5 text-left"
+    >
+      <span className="flex items-center gap-3">
+        <Icon size={18} className={on ? 'text-brand' : 'text-mute'} />
+        <span>
+          <span className="block text-sm font-500 text-ink">{label}</span>
+          {hint && <span className="block text-xs text-mute">{hint}</span>}
+        </span>
+      </span>
+      <span
+        className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? 'bg-brand' : 'bg-line'}`}
+      >
+        <span
+          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${on ? 'left-[22px]' : 'left-0.5'}`}
+        />
+      </span>
+    </button>
+  )
+}
+import type { ThemePref, TextScale } from '../lib/types'
+import { TEXT_SCALE_PX } from '../lib/types'
 import type { ThemeKey } from '../data/content'
 import { FOCUS, TIMES, LENGTHS } from '../data/profileOptions'
 import { APP_NAME } from '../config/brand'
@@ -28,6 +73,12 @@ const THEMES: Array<{ key: ThemePref; label: string; icon: typeof Sun }> = [
   { key: 'serene', label: 'Serene', icon: Leaf },
   { key: 'dark', label: 'Dark', icon: Moon },
   { key: 'system', label: 'System', icon: Monitor },
+]
+
+const TEXT_SIZES: Array<{ key: TextScale; label: string; px: string }> = [
+  { key: 'small', label: 'Small', px: TEXT_SCALE_PX.small },
+  { key: 'normal', label: 'Normal', px: TEXT_SCALE_PX.normal },
+  { key: 'large', label: 'Large', px: TEXT_SCALE_PX.large },
 ]
 
 function downloadFile(text: string, filename: string, mime: string) {
@@ -42,7 +93,9 @@ function downloadFile(text: string, filename: string, mime: string) {
 
 export default function Settings() {
   useDocMeta('Settings — Amor del Fato')
-  const { state, setTheme, resetAll, updateProfile, importState } = useStore()
+  const { state, setTheme, setPref, setTextScale, resetAll, updateProfile, importState } =
+    useStore()
+  const { canInstall, installed, promptInstall, isIOS } = useInstallPrompt()
   const [confirmReset, setConfirmReset] = useState(false)
   const [confirmRestore, setConfirmRestore] = useState(false)
   const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null)
@@ -110,7 +163,58 @@ export default function Settings() {
             )
           })}
         </div>
+
+        <div className="mt-5 border-t border-line pt-4">
+          <p className="text-xs font-600 uppercase tracking-widest text-mute">Text size</p>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {TEXT_SIZES.map(({ key, label, px }) => {
+              const active = state.prefs.textScale === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => setTextScale(key)}
+                  aria-pressed={active}
+                  className={`flex items-center justify-center rounded-xl border py-3 font-500 transition-colors ${
+                    active
+                      ? 'border-brand bg-brand-soft text-brand'
+                      : 'border-line text-mute hover:text-ink'
+                  }`}
+                  style={{ fontSize: px }}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </section>
+
+      {/* Install */}
+      {!installed && (
+        <section className="rounded-2xl border border-line bg-panel p-5">
+          <p className="text-xs font-600 uppercase tracking-widest text-mute">Install</p>
+          <p className="mt-2 text-sm text-mute">
+            Add {APP_NAME} to your home screen for a full-screen, offline practice. No app
+            store, no account.
+          </p>
+          {canInstall ? (
+            <button
+              onClick={promptInstall}
+              className="btn-conic mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-brand py-3 font-600 text-white"
+            >
+              <Smartphone size={17} /> Add to home screen
+            </button>
+          ) : isIOS ? (
+            <p className="mt-3 text-sm text-ink">
+              Tap the Share icon in Safari, then <strong>Add to Home Screen</strong>.
+            </p>
+          ) : (
+            <p className="mt-3 text-sm text-mute">
+              Open your browser menu and choose Install or Add to Home Screen.
+            </p>
+          )}
+        </section>
+      )}
 
       {/* Your practice */}
       <section className="rounded-2xl border border-line bg-panel p-5">
@@ -185,6 +289,29 @@ export default function Settings() {
           aria-label="Your name"
           className="mt-2 w-full rounded-xl border border-line bg-panel-2 px-4 py-2.5 text-[15px] text-ink outline-none placeholder:text-mute focus:border-brand"
         />
+      </section>
+
+      {/* Sound */}
+      <section className="rounded-2xl border border-line bg-panel p-5">
+        <p className="text-xs font-600 uppercase tracking-widest text-mute">Sound</p>
+        <div className="mt-2 divide-y divide-line">
+          {speechSupported() && (
+            <Toggle
+              label="Voice guidance"
+              hint="Read the guided script aloud during sessions"
+              icon={Volume2}
+              on={state.prefs.voiceGuidance}
+              onChange={(v) => setPref('voiceGuidance', v)}
+            />
+          )}
+          <Toggle
+            label="Ambient sound"
+            hint="A soft bed of sound during the silent timer"
+            icon={Waves}
+            on={state.prefs.ambientSound}
+            onChange={(v) => setPref('ambientSound', v)}
+          />
+        </div>
       </section>
 
       {/* Data */}
@@ -327,7 +454,7 @@ export default function Settings() {
         <ScrollText size={16} /> Terms &amp; Privacy
       </Link>
 
-      <p className="text-center text-xs text-mute">{APP_NAME} · v1.2</p>
+      <p className="text-center text-xs text-mute">{APP_NAME} · v1.3</p>
     </div>
   )
 }

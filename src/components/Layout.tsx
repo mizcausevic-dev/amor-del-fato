@@ -7,8 +7,10 @@ import {
   Flame,
   Settings,
   Shield,
+  Search,
 } from 'lucide-react'
 import { APP_NAME_LINES } from '../config/brand'
+import GlobalSearch, { openGlobalSearch } from './GlobalSearch'
 
 const NAV = [
   { to: '/', label: 'Today', icon: Home, end: true },
@@ -42,9 +44,19 @@ export default function Layout() {
 
       {/* Desktop left rail */}
       <aside className="fixed inset-y-0 left-0 z-20 hidden w-[220px] flex-col border-r border-line bg-panel/60 px-4 py-6 backdrop-blur md:flex">
-        <div className="mb-8">
+        <div className="mb-6">
           <Wordmark />
         </div>
+        <button
+          onClick={openGlobalSearch}
+          className="mb-4 flex items-center gap-2.5 rounded-xl border border-line bg-panel-2 px-3 py-2.5 text-sm text-mute transition-colors hover:text-ink"
+        >
+          <Search size={17} strokeWidth={2} />
+          <span className="flex-1 text-left">Search</span>
+          <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] text-mute">
+            ⌘K
+          </kbd>
+        </button>
         <nav aria-label="Primary" className="flex flex-1 flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon, end }) => (
             <NavLink
@@ -78,6 +90,17 @@ export default function Layout() {
           Settings
         </NavLink>
       </aside>
+
+      {/* Mobile search button, floating top-right, clear of the content column */}
+      <button
+        onClick={openGlobalSearch}
+        aria-label="Search"
+        className="fixed right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-line bg-panel/90 text-mute shadow-sm backdrop-blur transition-colors hover:text-ink md:hidden"
+      >
+        <Search size={19} strokeWidth={2} />
+      </button>
+
+      <GlobalSearch />
 
       {/* Main content. Wider on large screens so Today's two-column layout can
           breathe; reading-heavy pages cap their own inner width. */}

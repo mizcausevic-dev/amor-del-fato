@@ -63,6 +63,15 @@ export function migrate(parsed: Partial<AppState>): AppState {
       parsed.profile && typeof parsed.profile === 'object' && !Array.isArray(parsed.profile)
         ? parsed.profile
         : null,
+    prefs: {
+      voiceGuidance: !!(parsed.prefs && parsed.prefs.voiceGuidance),
+      ambientSound: !!(parsed.prefs && parsed.prefs.ambientSound),
+      textScale: (['small', 'normal', 'large'] as const).includes(
+        parsed.prefs?.textScale as never,
+      )
+        ? (parsed.prefs!.textScale as 'small' | 'normal' | 'large')
+        : 'normal',
+    },
     version: CURRENT_VERSION,
   }
   return merged

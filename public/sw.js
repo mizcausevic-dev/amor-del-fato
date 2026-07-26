@@ -2,8 +2,24 @@
    App shell is precached; navigations are network-first with an offline
    fallback to the cached shell; hashed assets are cache-first. Bump VERSION
    on every deploy so old caches are purged and returning devices self-heal. */
-const VERSION = 'adf-v7'
-const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/icon-192.svg', '/icon-512.svg']
+const VERSION = 'adf-v8'
+const SHELL = [
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  '/favicon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/apple-touch-icon.png',
+  '/fonts/fonts.css',
+  '/fonts/inter-400.woff2',
+  '/fonts/inter-500.woff2',
+  '/fonts/inter-600.woff2',
+  '/fonts/inter-700.woff2',
+  '/fonts/space-grotesk-600.woff2',
+  '/fonts/space-grotesk-700.woff2',
+  '/fonts/libre-baskerville-400.woff2',
+]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

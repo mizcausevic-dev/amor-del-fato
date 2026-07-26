@@ -11,6 +11,7 @@ import Breathe from './routes/Breathe'
 import Onboarding from './routes/Onboarding'
 import Terms from './routes/Terms'
 import Glossary from './routes/Glossary'
+import Readings from './routes/Readings'
 
 function OnboardingGate() {
   const { state } = useStore()
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/" element={<Today />} />
             <Route path="/paths" element={<Paths />} />
             <Route path="/glossary" element={<Glossary />} />
+            <Route path="/readings" element={<Readings />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/settings" element={<Settings />} />

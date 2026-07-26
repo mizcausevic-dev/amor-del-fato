@@ -1,12 +1,12 @@
 // library.ts
-// Content library for "Hey There Warrior" - Stoic practice meditations.
+// Content library for "Amor del Fato" - Stoic practice meditations.
 //
 // Non-fabrication note: every quote attributed to a named Stoic below is drawn
 // from a public-domain translation (George Long for Marcus Aurelius, Elizabeth
 // Carter for Epictetus, Richard Gummere and John W. Basore for Seneca). Where a
 // popular line could not be verified against a public-domain source with
 // confidence, it is written as original guidance and attributed to
-// "Hey There Warrior" rather than to a Stoic. Guided-practice scripts and
+// "Amor del Fato" rather than to a Stoic. Guided-practice scripts and
 // journaling prompts are original writing.
 
 export interface Quote {
@@ -104,7 +104,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'When you meet a hard day, do not ask why it came. Ask which part of it will move if you push, and push only there.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -189,7 +189,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'The wall in front of you is not only in your way. It is also the ground you will climb. Meet it as material, not as insult.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -271,7 +271,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'Endurance is not clenching your teeth and waiting for the storm to pass. It is learning to breathe steadily while it is still raining.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -413,7 +413,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'Anger arrives fast, but it still needs your permission to act. The pause is where you decide whether to grant it.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -554,7 +554,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'The feeling that you do not want to begin is not a reason to stay down. It is simply the first thing you get to move through.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -581,7 +581,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'At the end of the day, do not ask whether it went well. Ask whether you acted well, because only the second answer is yours to keep.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -609,7 +609,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'A day that is over asks nothing more of you. The only thing it can still give is a lesson, and the only thing it can still take is your sleep.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -665,7 +665,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'A fear you refuse to look at grows in the dark. A fear you examine in daylight almost always turns out smaller than its shadow.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -693,7 +693,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'Rehearsing hardship is not pessimism. It is how you take away its power to ambush you.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -722,7 +722,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'Fear lives in a time that is not here. Peace is almost always waiting in the present, if you will come back to it.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -751,7 +751,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'The task you most want to avoid is usually the one carrying the most of your day. Do it first, and the rest gets lighter.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -807,7 +807,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'Every promise you keep to yourself is a deposit. Discipline is just the balance you have built by keeping more than you break.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -835,7 +835,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'A craving is a wave. You do not have to fight it or obey it. You can watch it rise, crest, and pass while you stay on the shore.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -893,7 +893,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'The things you stopped noticing are the same things you would beg to have back. Gratitude is just noticing them before they are gone.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -921,7 +921,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'The mind reaches for what is missing by default. Gratitude is the deliberate act of counting what is present instead.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -949,7 +949,7 @@ export const sessions: Session[] = [
     quote: {
       text:
         'How you begin the day sets the lens for it. Start from lack, and the day looks poor. Start from enough, and the same day looks full.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     intro:
@@ -1165,7 +1165,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'A wall in front of you is also the ground you will climb. Meet it as material, not as insult.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1253,7 +1253,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Every promise you keep to yourself is a deposit. Discipline is the balance you build by keeping more than you break.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1275,7 +1275,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'A craving is a wave. You can watch it rise, crest, and pass while you stay on the shore.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1297,7 +1297,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The task you most want to avoid is usually the one carrying the most of your day.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1319,7 +1319,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The things you stopped noticing are the same things you would beg to have back.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1330,7 +1330,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'At the end of the day, ask whether you acted well, because only that answer is yours to keep.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1352,7 +1352,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Fear lives in a time that is not here. Peace is usually waiting in the present.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1374,7 +1374,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The wall and the way are often the same stone.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1396,7 +1396,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Anger arrives fast, but it still needs your permission to act.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1429,7 +1429,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The feeling that you do not want to begin is not a reason to stay down.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1451,7 +1451,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The mind reaches for what is missing by default. Gratitude is counting what is present instead.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1473,7 +1473,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Endurance is learning to breathe steadily while it is still raining.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1495,7 +1495,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'A fear you refuse to look at grows in the dark. A fear you examine in daylight turns out smaller.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1517,7 +1517,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'How you begin the day sets the lens for it. Start from enough, and the same day looks full.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1539,7 +1539,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'A day that is over asks nothing more of you.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1561,7 +1561,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The craving is the poverty, not the lack.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1583,7 +1583,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Rehearsing hardship is not pessimism. It is taking away its power to ambush you.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1605,7 +1605,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The obstacle in your way is the exact resistance your strength needs to grow.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1627,7 +1627,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'You do not have to endure the whole season today. You only have to endure today.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1649,7 +1649,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Motivation usually comes after you begin, not before.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1671,7 +1671,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The edge of your life is what makes each day worth anything at all.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1693,7 +1693,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'You are not killing desire. You are discovering you can have it and not be commanded by it.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1715,7 +1715,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'The examined fear has a shape, and shapes can be met.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1737,7 +1737,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'Gratitude is not forced positivity. It is corrected sight.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
@@ -1748,7 +1748,7 @@ export const dailyReflections: DailyReflection[] = [
     quote: {
       text:
         'You have this run of days, and it is enough to live well if you stop treating it as a rehearsal.',
-      author: 'Hey There Warrior',
+      author: 'Amor del Fato',
       source: 'Original guidance',
     },
     prompt:
