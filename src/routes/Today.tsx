@@ -100,7 +100,7 @@ export default function Today() {
       <p className="mt-2 max-w-md text-mute">{next.subtitle}</p>
       {progressLine && <p className="mt-5 text-xs font-500 text-mute">{progressLine}</p>}
       <div className="mt-6 flex items-center gap-3">
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 font-600 text-white transition-transform group-active:scale-95">
+        <span className="btn-conic inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 font-600 text-white transition-transform group-active:scale-95">
           <Play size={18} className="ml-0.5" />
           {practicedToday ? 'Practice again' : 'Start'}
         </span>

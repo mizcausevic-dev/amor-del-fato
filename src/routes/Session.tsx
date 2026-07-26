@@ -149,7 +149,7 @@ export default function Session() {
                 animate={{ opacity: canBegin ? 1 : 0.35 }}
                 onClick={() => canBegin && setPhase('script')}
                 disabled={!canBegin}
-                className="mt-10 rounded-full bg-brand px-8 py-3 font-500 text-white shadow-lg shadow-brand/20 transition-transform active:scale-95"
+                className="btn-conic mt-10 rounded-full bg-brand px-8 py-3 font-500 text-white shadow-lg shadow-brand/20 transition-transform active:scale-95"
               >
                 Begin
               </motion.button>
@@ -255,7 +255,7 @@ export default function Session() {
                   setIncludeReflection(true)
                   setPhase('leave')
                 }}
-                className="mt-4 w-full rounded-full bg-brand py-3.5 font-600 text-white transition-transform active:scale-[0.98]"
+                className="btn-conic mt-4 w-full rounded-full bg-brand py-3.5 font-600 text-white transition-transform active:scale-[0.98]"
               >
                 Complete practice
               </button>

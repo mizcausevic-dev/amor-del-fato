@@ -150,7 +150,7 @@ export default function Onboarding() {
               )}
               <button
                 onClick={next}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-8 py-3 font-600 text-white transition-transform active:scale-95"
+                className="btn-conic mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-8 py-3 font-600 text-white transition-transform active:scale-95"
               >
                 Continue <ChevronRight size={18} />
               </button>
@@ -208,7 +208,7 @@ export default function Onboarding() {
               </div>
               <button
                 onClick={next}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-8 py-3 font-600 text-white transition-transform active:scale-95"
+                className="btn-conic mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-8 py-3 font-600 text-white transition-transform active:scale-95"
               >
                 Continue <ChevronRight size={18} />
               </button>
@@ -233,6 +233,8 @@ export default function Onboarding() {
                 onChange={(e) => setName(e.target.value)}
                 autoFocus
                 maxLength={40}
+                name="display-name"
+                autoComplete="off"
                 placeholder="Your name"
                 aria-label="Your name (optional)"
                 onKeyDown={(e) => e.key === 'Enter' && commit(true)}
@@ -240,7 +242,7 @@ export default function Onboarding() {
               />
               <button
                 onClick={() => commit(true)}
-                className="mt-8 w-full rounded-full bg-brand py-3.5 font-600 text-white transition-transform active:scale-[0.98]"
+                className="btn-conic mt-8 w-full rounded-full bg-brand py-3.5 font-600 text-white transition-transform active:scale-[0.98]"
               >
                 Begin
               </button>

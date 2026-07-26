@@ -89,7 +89,7 @@ export default function CheckIn({
         <button
           onClick={() => onPick(selected, tags)}
           disabled={selected === null}
-          className="mt-8 w-full rounded-full bg-brand py-3 font-600 text-white transition-transform active:scale-[0.98] disabled:opacity-40"
+          className="btn-conic mt-8 w-full rounded-full bg-brand py-3 font-600 text-white transition-transform active:scale-[0.98] disabled:opacity-40"
         >
           Continue
         </button>

@@ -54,6 +54,8 @@ export default function Journal() {
           />
           <input
             type="search"
+            name="journal-search"
+            autoComplete="off"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search your reflections"

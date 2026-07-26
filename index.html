@@ -7,17 +7,132 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#1A1815" />
-    <meta name="description" content="Amor del Fato. A daily Stoic practice: guided sessions, a silent timer, streaks, and a reflection journal. Love your fate, train your mind." />
-    <meta property="og:title" content="Amor del Fato" />
-    <meta property="og:description" content="A daily Stoic practice that fuses classical Stoicism with modern self-help." />
-    <meta property="og:type" content="website" />
-    <title>Amor del Fato — Daily Stoic Practice</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Libre+Baskerville:ital@0;1&display=swap"
-      rel="stylesheet"
+
+    <title>Amor del Fato — A Daily Stoic Practice</title>
+    <meta
+      name="description"
+      content="A calm daily Stoic practice: guided sessions, a silent timer, an arrive-and-leave check-in, streaks, a glossary, and a private reflection journal. Local-first, no account, no tracking."
     />
+    <link rel="canonical" href="https://amordelfato.app/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Amor del Fato" />
+    <meta property="og:title" content="Amor del Fato — A Daily Stoic Practice" />
+    <meta
+      property="og:description"
+      content="Fuse classical Stoicism with modern self-help. Guided sessions, a silent timer, streaks, a Stoic glossary, and a private journal. Local-first and free."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://amordelfato.app/" />
+    <meta property="og:image" content="https://amordelfato.app/og-image.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Amor del Fato — A Daily Stoic Practice" />
+    <meta
+      name="twitter:description"
+      content="A calm daily Stoic practice: guided sessions, a silent timer, streaks, a glossary, and a private journal. Local-first, no tracking."
+    />
+    <meta name="twitter:image" content="https://amordelfato.app/og-image.png" />
+
+    <!-- Self-hosted fonts: no third-party request, honors the privacy promise -->
+    <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/space-grotesk-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+
+    <!-- Structured data. Accurate and stable: no ratings, no invented dates. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://amordelfato.app/#org",
+            "name": "Amor del Fato",
+            "url": "https://amordelfato.app/",
+            "logo": "https://amordelfato.app/icon-512.svg",
+            "sameAs": ["https://github.com/mizcausevic-dev/amor-del-fato"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://amordelfato.app/#website",
+            "url": "https://amordelfato.app/",
+            "name": "Amor del Fato",
+            "description": "A daily Stoic practice that fuses classical Stoicism with modern self-help.",
+            "publisher": { "@id": "https://amordelfato.app/#org" },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "WebApplication",
+            "name": "Amor del Fato",
+            "url": "https://amordelfato.app/",
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web browser",
+            "browserRequirements": "Requires JavaScript. Works offline once loaded.",
+            "description": "Guided Stoic sessions, a silent meditation timer, an arrive-and-leave check-in, streaks, a Stoic glossary and study cards, and a private reflection journal. Local-first: all data stays in your browser.",
+            "isAccessibleForFree": true,
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+            "publisher": { "@id": "https://amordelfato.app/#org" }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is Stoicism?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Stoicism is an ancient Greek and Roman philosophy of life that teaches focusing on what is within your control, living by virtue (wisdom, justice, courage, and self-discipline), and meeting whatever happens with a steady mind. Its best-known teachers are Marcus Aurelius, Epictetus, and Seneca."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the dichotomy of control?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It is Epictetus's core distinction: some things are up to us (our judgments, choices, and actions) and some are not (other people, the past, outcomes, our reputation). Peace of mind comes from investing your effort in what answers to your choice and accepting the rest."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does Stoicism mean suppressing your emotions?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Stoicism does not mean being cold or bottling feelings up. It aims at freedom from destructive, distorted emotions (apatheia) by correcting the judgments that drive them, while still valuing healthy feelings like joy, gratitude, and love."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What does amor fati mean?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Amor fati is Latin for love of fate: the practice of not merely accepting but embracing whatever happens as material to work with, rather than resenting it. It turns adversity into an occasion for virtue."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do you practice Stoicism daily?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Common daily practices include a morning preparation for the day, an evening review of your conduct, negative visualization (premeditatio malorum) to soften fear and deepen gratitude, and repeatedly sorting events into what is and is not within your control."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Stoicism a religion?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Stoicism is a practical philosophy, not a religion. It requires no worship or doctrine of faith and is practiced today by people of many beliefs as a framework for resilience and ethical living."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

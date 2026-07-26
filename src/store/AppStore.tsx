@@ -11,6 +11,7 @@ import {
 import {
   clearState,
   loadState,
+  migrate,
   saveState,
   uid,
 } from '../lib/storage'
@@ -234,8 +235,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const importState = useCallback((json: string): boolean => {
     try {
       const parsed = JSON.parse(json)
-      if (typeof parsed !== 'object' || parsed === null) return false
-      setState(() => ({ ...emptyState(), ...parsed }))
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        return false
+      }
+      // Reuse the same shape-coercing validation as the boot path.
+      setState(() => migrate(parsed))
       return true
     } catch {
       return false

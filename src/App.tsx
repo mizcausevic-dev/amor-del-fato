@@ -10,6 +10,7 @@ import Session from './routes/Session'
 import Breathe from './routes/Breathe'
 import Onboarding from './routes/Onboarding'
 import Terms from './routes/Terms'
+import Glossary from './routes/Glossary'
 
 function OnboardingGate() {
   const { state } = useStore()
@@ -31,6 +32,7 @@ export default function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Today />} />
             <Route path="/paths" element={<Paths />} />
+            <Route path="/glossary" element={<Glossary />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/settings" element={<Settings />} />

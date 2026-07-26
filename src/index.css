@@ -128,6 +128,57 @@ body::after {
   top: 0;
 }
 
+/* Animated conic-gradient border on top-level CTAs. A rotating conic gradient
+   fills a ::before layer; an inset layer mask (content-box vs border-box, xor)
+   punches out the interior so only the border ring shows. The button's own
+   fill and text are untouched. Registered @property lets the angle animate
+   smoothly; without it the ring is simply static (graceful degradation). */
+@property --btn-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.btn-conic {
+  position: relative;
+  isolation: isolate;
+}
+.btn-conic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px; /* ring thickness */
+  background: conic-gradient(
+    from var(--btn-angle),
+    transparent 0deg,
+    rgba(255, 255, 255, 0.85) 55deg,
+    var(--brand-2) 110deg,
+    transparent 200deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: btn-angle-spin 4.5s linear infinite;
+  pointer-events: none;
+}
+@keyframes btn-angle-spin {
+  to {
+    --btn-angle: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-conic::before {
+    animation: none;
+  }
+}
+
 /* Thin, calm scrollbars. */
 * {
   scrollbar-width: thin;

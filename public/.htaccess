@@ -12,10 +12,26 @@
 
 # Long-cache fingerprinted assets; keep the shell fresh.
 <IfModule mod_headers.c>
-  <FilesMatch "\.(js|css|svg|woff2)$">
+  <FilesMatch "\.(js|svg|woff2|png)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
-  <FilesMatch "(index\.html|sw\.js|manifest\.webmanifest)$">
+  # Hashed CSS is immutable; fonts.css is not fingerprinted, keep it revalidated.
+  <FilesMatch "index-.*\.css$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "(index\.html|sw\.js|manifest\.webmanifest|fonts\.css|sitemap\.xml|robots\.txt)$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
+
+  # Security headers. Fonts are self-hosted, so the CSP can be strict: no
+  # third-party origins are allowed at all. 'unsafe-inline' is required in
+  # style-src only (Framer Motion writes inline style attributes); script-src
+  # stays locked to 'self'. Inline JSON-LD is data, not executed, so it is
+  # unaffected by script-src.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'"
 </IfModule>

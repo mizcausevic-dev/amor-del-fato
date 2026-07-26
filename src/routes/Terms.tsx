@@ -1,6 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { APP_NAME } from '../config/brand'
+import { useDocMeta } from '../lib/useDocMeta'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -14,6 +15,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function Terms() {
+  useDocMeta(
+    'Terms & Privacy — Amor del Fato',
+    'How Amor del Fato handles your data: local-first, no account, no server, no tracking. Plain-language terms and privacy.',
+  )
   const navigate = useNavigate()
 
   return (

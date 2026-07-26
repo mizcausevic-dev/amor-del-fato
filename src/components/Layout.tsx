@@ -1,10 +1,19 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Home, Compass, NotebookPen, Flame, Settings, Shield } from 'lucide-react'
+import {
+  Home,
+  Compass,
+  GraduationCap,
+  NotebookPen,
+  Flame,
+  Settings,
+  Shield,
+} from 'lucide-react'
 import { APP_NAME_LINES } from '../config/brand'
 
 const NAV = [
   { to: '/', label: 'Today', icon: Home, end: true },
   { to: '/paths', label: 'Paths', icon: Compass, end: false },
+  { to: '/glossary', label: 'Study', icon: GraduationCap, end: false },
   { to: '/journal', label: 'Journal', icon: NotebookPen, end: false },
   { to: '/progress', label: 'Progress', icon: Flame, end: false },
 ] as const

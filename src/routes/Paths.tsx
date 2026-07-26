@@ -6,8 +6,13 @@ import { paths, sessionsOfPath, THEME_META, type Path } from '../data/content'
 import { useStore } from '../store/AppStore'
 import ExercisesSection from '../components/ExercisesSection'
 import MeetTheStoics from '../components/MeetTheStoics'
+import { useDocMeta } from '../lib/useDocMeta'
 
 export default function Paths() {
+  useDocMeta(
+    'Stoic Paths & Exercises — Amor del Fato',
+    'Guided courses through the core disciplines of Stoic practice, the classic Stoic exercises, and short bios of the Stoics themselves.',
+  )
   const navigate = useNavigate()
   const { state, setActivePath } = useStore()
   const [selected, setSelected] = useState<Path | null>(null)
@@ -151,7 +156,7 @@ export default function Paths() {
                   setActivePath(selected.id)
                   navigate(`/session/${list[idx].id}`)
                 }}
-                className="mt-6 w-full rounded-full bg-brand py-3.5 font-600 text-white"
+                className="btn-conic mt-6 w-full rounded-full bg-brand py-3.5 font-600 text-white"
               >
                 {state.pathProgress[selected.id] ? 'Continue path' : 'Start path'}
               </button>

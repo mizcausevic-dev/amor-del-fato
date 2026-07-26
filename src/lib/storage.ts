@@ -31,16 +31,37 @@ export function saveState(state: AppState): void {
   }
 }
 
-/** Merge an unknown/older payload onto a clean base so new fields are always present. */
-function migrate(parsed: Partial<AppState>): AppState {
+function coerceArray<T>(v: unknown): T[] {
+  return Array.isArray(v) ? (v as T[]) : []
+}
+
+function coerceObject<T extends object>(v: unknown, fallback: T): T {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as T) : fallback
+}
+
+/**
+ * Merge an unknown/older payload onto a clean base so new fields are always
+ * present, and coerce the collection fields to their expected shapes. This is
+ * the boot path from localStorage, so a corrupt/tampered payload must never
+ * throw or white-screen the app (e.g. journalEntries stored as a string would
+ * crash the spread + sort in the Journal). Also the shared validation for
+ * imported backups.
+ */
+export function migrate(parsed: Partial<AppState>): AppState {
   const base = emptyState()
   const merged: AppState = {
     ...base,
     ...parsed,
-    streak: { ...base.streak, ...(parsed.streak ?? {}) },
-    pathProgress: { ...(parsed.pathProgress ?? {}) },
-    completedSessions: parsed.completedSessions ?? [],
-    journalEntries: parsed.journalEntries ?? [],
+    streak: { ...base.streak, ...coerceObject(parsed.streak, {}) },
+    pathProgress: coerceObject(parsed.pathProgress, {}),
+    completedSessions: coerceArray(parsed.completedSessions),
+    journalEntries: coerceArray<AppState['journalEntries'][number]>(
+      parsed.journalEntries,
+    ).filter((e) => e && typeof e === 'object' && typeof e.id === 'string'),
+    profile:
+      parsed.profile && typeof parsed.profile === 'object' && !Array.isArray(parsed.profile)
+        ? parsed.profile
+        : null,
     version: CURRENT_VERSION,
   }
   return merged
