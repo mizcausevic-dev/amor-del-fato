@@ -10,6 +10,7 @@ export interface CompletedSession {
   journalEntryId: string | null
   arrivalState: number | null // 1..5 how they arrived, null if skipped
   departureState: number | null // 1..5 how they left, null if skipped
+  tags?: string[] // optional context tags named at the arrive check-in
 }
 
 export interface JournalEntry {
@@ -20,6 +21,8 @@ export interface JournalEntry {
   prompt: string // snapshot of the prompt shown
   body: string
   quote?: { text: string; author: string; source: string } // snapshot, for re-reading
+  tags?: string[] // optional context tags carried from the session
+  pinned?: boolean // kept as a "lesson" to resurface
 }
 
 export interface PathProgress {

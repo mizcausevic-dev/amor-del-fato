@@ -19,3 +19,18 @@ export function stateLabel(value: number | null): string {
   if (value == null) return ''
   return CHECK_STATES.find((s) => s.value === value)?.label ?? ''
 }
+
+// Optional context tags named at the arrive check-in: the externals shaping the
+// day. Stoic work is separating the external from the judgment attached to it,
+// so naming the external is the point. Capture and search only, never a
+// correlation dashboard or a score.
+export const CONTEXT_TAGS = [
+  'Sleep',
+  'Work',
+  'Family',
+  'Health',
+  'Money',
+  'People',
+  'Solitude',
+  'World',
+] as const

@@ -23,15 +23,34 @@ export default function ShiftChart({ sessions }: { sessions: CompletedSession[] 
     const today = todayLocal()
     const week = withStates.filter((s) => dayDiff(s.completedDateLocal, today) <= 7)
     if (week.length < 2) return null
-    const avg = (fn: (s: CompletedSession) => number) =>
-      week.reduce((a, s) => a + fn(s), 0) / week.length
-    const a = avg((s) => s.arrivalState as number)
-    const d = avg((s) => s.departureState as number)
-    const aL = stateLabel(Math.round(a))
-    const dL = stateLabel(Math.round(d))
-    if (d >= a + 0.4) return `Most sessions this week moved you from ${aL} toward ${dL}.`
-    if (a >= d + 0.4) return `This week you often arrived ${aL} and settled gently.`
-    return `This week you tended to arrive and leave around ${dL}.`
+    // Mode, not average. The equanimity axis is ordinal, so the mean of
+    // Rattled and Grounded is not "Steady" — averaging it is a category error
+    // that manufactures a number the app deliberately never shows. Report the
+    // most frequent arrival and departure state instead.
+    const mode = (fn: (s: CompletedSession) => number) => {
+      const counts = new Map<number, number>()
+      for (const s of week) {
+        const v = fn(s)
+        counts.set(v, (counts.get(v) ?? 0) + 1)
+      }
+      // highest count wins; ties break toward the higher (calmer) state
+      let best = -1
+      let bestCount = -1
+      for (const [v, c] of counts) {
+        if (c > bestCount || (c === bestCount && v > best)) {
+          best = v
+          bestCount = c
+        }
+      }
+      return best
+    }
+    const a = mode((s) => s.arrivalState as number)
+    const d = mode((s) => s.departureState as number)
+    const aL = stateLabel(a)
+    const dL = stateLabel(d)
+    if (d > a) return `Most sessions this week moved you from ${aL} toward ${dL}.`
+    if (a > d) return `This week you often arrived ${aL} and settled gently.`
+    return `This week you most often arrived and left ${dL}.`
   }, [withStates])
 
   if (withStates.length === 0) {

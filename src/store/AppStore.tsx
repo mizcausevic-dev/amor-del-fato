@@ -31,6 +31,7 @@ interface CompleteSessionInput {
   pathSessionIds?: string[] // lets the store advance a path pointer without importing content
   arrivalState?: number | null
   departureState?: number | null
+  tags?: string[]
   reflection?: {
     prompt: string
     body: string
@@ -50,6 +51,7 @@ interface Store {
   completeSession: (input: CompleteSessionInput) => void
   addJournalEntry: (input: AddJournalInput) => void
   deleteJournalEntry: (id: string) => void
+  togglePin: (id: string) => void
   setActivePath: (pathId: string | null) => void
   setTheme: (pref: ThemePref) => void
   completeOnboarding: (profile: Profile) => void
@@ -115,6 +117,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           prompt: input.reflection.prompt,
           body: input.reflection.body.trim(),
           quote: input.reflection.quote,
+          tags: input.tags && input.tags.length ? input.tags : undefined,
         }
         journalEntries = [entry, ...prev.journalEntries]
       }
@@ -130,6 +133,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           journalEntryId: journalId,
           arrivalState: input.arrivalState ?? null,
           departureState: input.departureState ?? null,
+          tags: input.tags && input.tags.length ? input.tags : undefined,
         },
         ...prev.completedSessions,
       ]
@@ -189,6 +193,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
+  const togglePin = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      journalEntries: prev.journalEntries.map((e) =>
+        e.id === id ? { ...e, pinned: !e.pinned } : e,
+      ),
+    }))
+  }, [])
+
   const setActivePath = useCallback((pathId: string | null) => {
     setState((prev) => ({ ...prev, activePathId: pathId }))
   }, [])
@@ -235,6 +248,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completeSession,
       addJournalEntry,
       deleteJournalEntry,
+      togglePin,
       setActivePath,
       setTheme,
       completeOnboarding,
@@ -247,6 +261,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completeSession,
       addJournalEntry,
       deleteJournalEntry,
+      togglePin,
       setActivePath,
       setTheme,
       completeOnboarding,

@@ -27,6 +27,7 @@ export default function Session() {
   const [reflection, setReflection] = useState('')
   const [elapsed, setElapsed] = useState(0)
   const [arrival, setArrival] = useState<number | null>(null)
+  const [tags, setTags] = useState<string[]>([])
   const [includeReflection, setIncludeReflection] = useState(true)
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export default function Session() {
       pathSessionIds: path?.sessionIds,
       arrivalState: arrival,
       departureState,
+      tags,
       reflection: includeReflection
         ? { prompt: session.reflection, body: reflection, quote: session.quote }
         : null,
@@ -115,8 +117,10 @@ export default function Session() {
             <CheckIn
               key="arrive"
               title="How do you arrive?"
-              onPick={(v) => {
+              withTags
+              onPick={(v, picked) => {
                 setArrival(v)
+                setTags(picked)
                 setPhase('anchor')
               }}
             />

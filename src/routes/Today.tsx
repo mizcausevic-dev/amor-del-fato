@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Flame, Play, PenLine, Wind, Shuffle, Check, ChevronRight, X } from 'lucide-react'
+import { Flame, Play, PenLine, Wind, Shuffle, Check, ChevronRight, X, Pin } from 'lucide-react'
 import { useStore } from '../store/AppStore'
 import { liveStreak } from '../lib/streak'
 import { humanDate, todayLocal } from '../lib/date'
@@ -24,6 +24,13 @@ function partOfDay(): string {
   if (h < 12) return 'morning'
   if (h < 18) return 'afternoon'
   return 'evening'
+}
+
+/** Stable per-day hash so a resurfaced lesson is the same all day, rotates daily. */
+function dayHash(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0
+  return h
 }
 
 export default function Today() {
@@ -53,6 +60,10 @@ export default function Today() {
   const dailyNote = reflectionNoteFor(daily.day)
   const takeaway = takeawayFor(next.id)
   const recent = state.journalEntries[0]
+
+  // Resurface one kept "lesson", stable for the day, rotating across pinned entries.
+  const pinned = state.journalEntries.filter((e) => e.pinned)
+  const lesson = pinned.length ? pinned[dayHash(today) % pinned.length] : null
 
   const [reflectOpen, setReflectOpen] = useState(false)
   const [quickOpen, setQuickOpen] = useState(false)
@@ -224,6 +235,23 @@ export default function Today() {
     </button>
   )
 
+  const lessonCard = lesson && (
+    <button
+      onClick={() => navigate('/journal')}
+      className="w-full rounded-2xl border border-brand/30 bg-brand-soft/30 p-4 text-left transition-colors hover:bg-brand-soft/50"
+    >
+      <p className="flex items-center gap-1.5 text-xs font-600 uppercase tracking-widest text-brand">
+        <Pin size={13} className="fill-current" /> A lesson you kept
+      </p>
+      <p className="mt-2 line-clamp-3 text-[15px] leading-relaxed text-ink">{lesson.body}</p>
+      {lesson.quote && (
+        <p className="mt-2 font-serif text-xs italic text-mute">
+          &ldquo;{lesson.quote.text}&rdquo; — {lesson.quote.author}
+        </p>
+      )}
+    </button>
+  )
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
@@ -257,6 +285,7 @@ export default function Today() {
         <div className="flex min-w-0 flex-col gap-4">
           <div className="hidden lg:block">{collectionsRail}</div>
           <StreakStrip practiced={practiced} />
+          {lessonCard}
           {journalGlimpse}
         </div>
       </div>
