@@ -3,39 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Shield, ChevronRight } from 'lucide-react'
 import { useStore } from '../store/AppStore'
 import { paths, type ThemeKey } from '../data/content'
+import { FOCUS, TIMES, LENGTHS, recommendPath } from '../data/profileOptions'
 import { APP_NAME } from '../config/brand'
 import type { PracticeTime, Profile, SessionLength } from '../lib/types'
-
-const FOCUS: Array<{ key: ThemeKey; label: string }> = [
-  { key: 'control', label: 'What I can control' },
-  { key: 'fear', label: 'Fear & anxiety' },
-  { key: 'anger', label: 'Anger' },
-  { key: 'adversity', label: 'Hard times' },
-  { key: 'resilience', label: 'Resilience' },
-  { key: 'mortality', label: 'Mortality' },
-  { key: 'discipline', label: 'Discipline' },
-  { key: 'gratitude', label: 'Gratitude' },
-  { key: 'purpose', label: 'Purpose' },
-  { key: 'relationships', label: 'Relationships' },
-]
-
-const TIMES: Array<{ key: PracticeTime; label: string }> = [
-  { key: 'morning', label: 'Morning' },
-  { key: 'evening', label: 'Evening' },
-  { key: 'both', label: 'Both' },
-]
-
-const LENGTHS: Array<{ key: SessionLength; label: string; hint: string }> = [
-  { key: 'short', label: 'Short', hint: '~5 min' },
-  { key: 'standard', label: 'Standard', hint: '~10 min' },
-  { key: 'deep', label: 'Deep', hint: '~15 min' },
-]
-
-function recommendPath(focus: ThemeKey[]): string {
-  const primary = focus[0]
-  const match = paths.find((p) => p.theme === primary)
-  return (match ?? paths[0]).id
-}
 
 export default function Onboarding() {
   const { completeOnboarding } = useStore()

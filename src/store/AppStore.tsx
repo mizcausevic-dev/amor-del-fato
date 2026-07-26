@@ -221,10 +221,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const updateProfile = useCallback((patch: Partial<Profile>) => {
-    setState((prev) => ({
-      ...prev,
-      profile: prev.profile ? { ...prev.profile, ...patch } : prev.profile,
-    }))
+    setState((prev) => {
+      const base: Profile = prev.profile ?? {
+        focusAreas: [],
+        practiceTime: 'both',
+        sessionLength: 'standard',
+        name: null,
+        recommendedPathId: null,
+      }
+      return { ...prev, profile: { ...base, ...patch } }
+    })
   }, [])
 
   const resetAll = useCallback(() => {

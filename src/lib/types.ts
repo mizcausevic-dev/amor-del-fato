@@ -36,6 +36,7 @@ export interface StreakState {
   currentStreak: number
   longestStreak: number
   lastCompletedDateLocal: string | null
+  graceUsedInRun?: boolean // one forgiven missed day per run
 }
 
 export type ThemePref = 'light' | 'dark' | 'serene' | 'system'

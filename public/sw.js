@@ -2,7 +2,7 @@
    App shell is precached; navigations are network-first with an offline
    fallback to the cached shell; hashed assets are cache-first. Bump VERSION
    on every deploy so old caches are purged and returning devices self-heal. */
-const VERSION = 'adf-v6'
+const VERSION = 'adf-v7'
 const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/icon-192.svg', '/icon-512.svg']
 
 self.addEventListener('install', (event) => {

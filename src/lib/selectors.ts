@@ -12,3 +12,13 @@ export function countForDay(state: AppState, dayLocal: string): number {
   return state.completedSessions.filter((c) => c.completedDateLocal === dayLocal)
     .length
 }
+
+/** Distinct days practiced in the calendar month of `dayLocal` ("YYYY-MM-DD"). */
+export function daysPracticedInMonth(state: AppState, dayLocal: string): number {
+  const prefix = dayLocal.slice(0, 7) // "YYYY-MM"
+  const days = new Set<string>()
+  for (const c of state.completedSessions) {
+    if (c.completedDateLocal.startsWith(prefix)) days.add(c.completedDateLocal)
+  }
+  return days.size
+}

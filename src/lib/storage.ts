@@ -1,4 +1,5 @@
 import { CURRENT_VERSION, emptyState, type AppState } from './types'
+import { parseLocal } from './date'
 
 const KEY = 'hey-there-warrior:v1'
 
@@ -78,4 +79,29 @@ export function clearState(): void {
 /** Export the full state as a pretty JSON string (for the Settings backup action). */
 export function exportState(state: AppState): string {
   return JSON.stringify(state, null, 2)
+}
+
+/** Render the journal as human-readable Markdown for reading, printing, or sharing. */
+export function journalToMarkdown(state: AppState): string {
+  const entries = [...state.journalEntries].sort((a, b) =>
+    a.createdAtISO < b.createdAtISO ? 1 : -1,
+  )
+  let md = '# Amor del Fato — Journal\n\n'
+  md += `${entries.length} reflection${entries.length === 1 ? '' : 's'}.\n\n`
+  for (const e of entries) {
+    const date = parseLocal(e.dateLocal).toLocaleDateString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+    md += `## ${date}\n\n`
+    if (e.pinned) md += `**Kept as a lesson.**\n\n`
+    if (e.prompt) md += `*${e.prompt}*\n\n`
+    md += `${e.body}\n\n`
+    if (e.quote) md += `> ${e.quote.text}\n>\n> — ${e.quote.author}\n\n`
+    if (e.tags && e.tags.length) md += `Tags: ${e.tags.join(', ')}\n\n`
+    md += `---\n\n`
+  }
+  return md
 }

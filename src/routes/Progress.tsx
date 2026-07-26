@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 import { Flame, Clock, CheckCircle, Trophy } from 'lucide-react'
 import { useStore } from '../store/AppStore'
-import { liveStreak } from '../lib/streak'
+import { liveStreak, streakOnGrace } from '../lib/streak'
 import { addDays, lastNDays, parseLocal, todayLocal } from '../lib/date'
-import { practicedDaySet } from '../lib/selectors'
+import { daysPracticedInMonth, practicedDaySet } from '../lib/selectors'
+import { useDocMeta } from '../lib/useDocMeta'
 import DayDot from '../components/DayDot'
 import ShiftChart from '../components/ShiftChart'
 
@@ -28,10 +29,13 @@ function Stat({
 }
 
 export default function Progress() {
+  useDocMeta('Your Progress — Amor del Fato')
   const { state } = useStore()
   const today = todayLocal()
   const practiced = practicedDaySet(state)
   const streak = liveStreak(state.streak, today)
+  const monthDays = daysPracticedInMonth(state, today)
+  const onGrace = streakOnGrace(state.streak, today)
 
   // Build a weekday-aligned grid: columns are weeks, rows are Sun..Sat.
   const { columns } = useMemo(() => {
@@ -59,6 +63,21 @@ export default function Progress() {
         <Stat icon={CheckCircle} value={totalSessions} label="Sessions" />
         <Stat icon={Clock} value={state.totalMinutes} label="Minutes" />
       </div>
+
+      <p className="-mt-2 text-sm text-mute">
+        {monthDays > 0
+          ? `You have practiced ${monthDays} ${monthDays === 1 ? 'day' : 'days'} this month.`
+          : 'A fresh month. Begin when you are ready.'}
+      </p>
+
+      {onGrace && (
+        <div className="-mt-3 rounded-2xl border-l-2 border-brand bg-brand-soft/40 px-4 py-3">
+          <p className="text-[15px] leading-relaxed text-ink">
+            You missed a day, and your streak held. One grace day per run. Practice today
+            to keep it going.
+          </p>
+        </div>
+      )}
 
       <ShiftChart sessions={state.completedSessions} />
 
