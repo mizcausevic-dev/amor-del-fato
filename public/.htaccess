@@ -4,6 +4,11 @@
   RewriteEngine On
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
+  # Prerendered content routes: serve the static HTML snapshot directly (with or
+  # without a trailing slash) so non-JS crawlers get real content. The same shell
+  # boots the SPA for JS clients. Rewriting straight to the file avoids the
+  # trailing-slash redirect mod_dir would otherwise issue for a real directory.
+  RewriteRule ^(readings|glossary|paths)/?$ /$1/index.html [L]
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]

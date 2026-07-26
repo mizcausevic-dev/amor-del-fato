@@ -2,7 +2,7 @@
    App shell is precached; navigations are network-first with an offline
    fallback to the cached shell; hashed assets are cache-first. Bump VERSION
    on every deploy so old caches are purged and returning devices self-heal. */
-const VERSION = 'adf-v8'
+const VERSION = 'adf-v9'
 const SHELL = [
   '/',
   '/index.html',
