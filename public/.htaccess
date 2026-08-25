@@ -3,6 +3,16 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Block deploy/build internals that were once uploaded to this static host.
+  # Hostinger serves any file ever placed in the doc root indefinitely (see
+  # kg-incident-runbooks Runbook 04), so these must run first -- before the
+  # -f/-d passthrough below, which would otherwise serve them directly since
+  # the files exist on disk.
+  RewriteRule ^(scripts|\.github|generated|node_modules)/ - [R=404,L]
+  RewriteRule \.(py|sh|ya?ml|toml|lock|bak|log|sql|env)$ - [R=404,L]
+  RewriteRule ^(README|CHANGELOG|CONTRIBUTING)\.md$ - [R=404,L]
+
   RewriteRule ^index\.html$ - [L]
   # Prerendered content routes: serve the static HTML snapshot directly (with or
   # without a trailing slash) so non-JS crawlers get real content. The same shell
